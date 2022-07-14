@@ -92,7 +92,8 @@ def print_STRU(structure,filename='STRU'):
                     print(find_orb(element,ORB_DIR),file=fout)
                 else:
                     print("%s %.3f %s_ONCV_PBE-1.0.upf"%(element,atomic_masses[atomic_numbers[element]],element),file=fout)
-
+        print(file=fout)
+        
         print("LATTICE_CONSTANT",file=fout)
         print("1.0",file=fout)
         print(file=fout)
