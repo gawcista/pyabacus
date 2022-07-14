@@ -1,5 +1,4 @@
 import os
-from unittest import result
 from numpy import ones,zeros,array
 from ase import io
 from ase.units import Bohr,Hartree
@@ -11,11 +10,11 @@ import argparse
 flag_find_upf = False
 flag_find_orb = False
 parse = argparse.ArgumentParser()
-parse.add_argument('-l', '--lcao',default=0,type=int)
-parse.add_argument('-f', '--find',default=0,type=int)
+parse.add_argument('-l', '--lcao',default=1,type=int)
+parse.add_argument('-f', '--find',default=1,type=int)
 parse.add_argument('-du', '--dir_upf',default="./",type=str)
 parse.add_argument('-do', '--dir_orb',default="./",type=str)
-parse.add_argument('-o', '--output',default=0,type=int)
+parse.add_argument('-o', '--output',default=1,type=int)
 parse.add_argument('-of', '--outputfile',default="STRU",type=str)
 parse.add_argument('-c', '--check',default="POSCAR",type=str)
 file_in = parse.parse_args().check
@@ -49,9 +48,22 @@ def find_orb(element,dir="."):
     result = find_file(keytitle,dir)
     return result[0]
 
+def get_formula(symbol_list):
+    symbols,nions = [],[]
+    count = 1
+    symbols.append(symbol_list[0])
+    for i in range(1,len(symbol_list)):
+        if symbol_list[i] == symbol_list[i-1]:
+            count +=1
+        else:
+            nions.append(count)
+            symbols.append(symbol_list[i])
+            count = 1
+    nions.append(count)
+    return symbols,nions
+
 def print_STRU(structure,filename='STRU'):
-    symbols = list(Formula(structure.get_chemical_formula()).count().keys())
-    nions = list(Formula(structure.get_chemical_formula()).count().values())
+    symbols,nions = get_formula(structure.get_chemical_symbols())
     lattice_vec = structure.get_cell()[:]/Bohr
     nions_tot = len(structure)
     constraints = ones([nions_tot,3]).astype(int)
