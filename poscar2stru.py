@@ -41,12 +41,16 @@ def find_file(filename,dir="."):
 def find_upf(element,dir="."):
     keytitle = element+'_'
     result = find_file(keytitle,dir)
-    return result[0]
+    for f in result:
+        if ".upf" in f:
+            return f
 
 def find_orb(element,dir="."):
     keytitle = element+'_'
     result = find_file(keytitle,dir)
-    return result[0]
+    for f in result:
+        if ".orb" in f:
+            return f
 
 def get_formula(symbol_list):
     symbols,nions = [],[]
@@ -93,7 +97,7 @@ def print_STRU(structure,filename='STRU'):
                 else:
                     print("%s %.3f %s_ONCV_PBE-1.0.upf"%(element,atomic_masses[atomic_numbers[element]],element),file=fout)
         print(file=fout)
-        
+
         print("LATTICE_CONSTANT",file=fout)
         print("1.0",file=fout)
         print(file=fout)
